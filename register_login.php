@@ -5,12 +5,19 @@ $password = "";
 $dbname = "user_admin";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-
+//Register
 if (isset($_POST['register'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     $role = $_POST['role'];
+//Check if name exist
+     $check_username_sql = "SELECT * FROM user WHERE username = '$username'";
+    $result = $conn->query($check_username_sql);
 
+    if ($result->num_rows > 0) {
+        echo "Username already exists. Please choose another one.";
+    } else {
+    //Adds username password and role into user database
     $sql = "INSERT INTO user(username, password, role) VALUES ('$username', '$password', '$role')";
         
     if ($conn->query($sql) === TRUE) {
@@ -19,7 +26,8 @@ if (isset($_POST['register'])) {
         echo "Error: " . $conn->error;
     }
 }
-
+}
+//Login
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
